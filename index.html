@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma Surpresa para Bela ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --tinder-pink: #fe3c72;
+            --tinder-green: #1be4a1;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+            background: linear-gradient(45deg, #ffafbd, #ffc3a0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        .page { display: none; width: 100%; max-width: 400px; text-align: center; animation: fadeIn 0.5s; flex-direction: column; align-items: center; }
+        .active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* TELA 0: CONTADOR */
+        #contador-texto { font-size: 2.5rem; font-weight: bold; color: white; text-shadow: 2px 2px 10px rgba(0,0,0,0.2); margin-top: 20px; }
+
+        /* TELA 1: TINDER CARD */
+        .tinder-card { width: 90%; height: 480px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .photo-area { flex-grow: 1; background-size: cover; background-position: center; transition: 0.3s; }
+        .info-area { padding: 15px; text-align: left; background: white; }
+        .info-area h2 { margin: 0; font-size: 1.5rem; color: #333; }
+        .actions { display: flex; justify-content: space-around; padding: 20px; width: 100%; height: 80px; }
+        .btn-tinder { width: 65px; height: 65px; border-radius: 50%; border: none; background: white; cursor: pointer; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.1s; }
+        #btn-nope { color: var(--tinder-pink); }
+        .btn-like { color: var(--tinder-green); }
+
+        /* TELA 2: MATCH */
+        .match-photos { display: flex; justify-content: center; margin-bottom: 20px; }
+        .match-circle { width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; background-size: cover; background-position: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .match-circle:last-child { margin-left: -20px; }
+        .match-title { color: white; font-size: 3.2rem; font-weight: bold; font-style: italic; margin: 10px 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+
+        /* GERAL */
+        .btn-main { padding: 15px 40px; border-radius: 50px; border: none; background: var(--tinder-pink); color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 15px rgba(254, 60, 114, 0.4); }
+        .pulse { animation: pulse-animation 1.5s infinite; }
+        @keyframes pulse-animation { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .video-container { width: 90%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        iframe { width: 100%; height: 100%; border: none; }
+        .final-card { padding: 30px; width: 85%; }
+    </style>
+</head>
+<body>
+
+    <section id="page-countdown" class="page active">
+        <h1 style="color: white;">Falta pouco, Bela... 🌹</h1>
+        <div id="contador-texto">00d 00h 00m 00s</div>
+        <p style="color: white; margin-top: 20px;">Sua surpresa está sendo preparada.</p>
+    </section>
+
+    <section id="page1" class="page">
+        <div class="tinder-card glass">
+            <div id="foto-perfil" class="photo-area"></div>
+            <div class="info-area">
+                <h2 id="nome-perfil">João Pedro, 18</h2>
+                <p>Salvador, Bahia</p>
+            </div>
+        </div>
+        <div class="actions">
+            <button id="btn-nope" class="btn-tinder" onclick="fugirOuBloquear()">✖</button>
+            <button class="btn-tinder btn-like" onclick="nextPhoto()">❤</button>
+        </div>
+    </section>
+
+    <section id="page2" class="page">
+        <div class="match-photos">
+            <div class="match-circle" style="background-image: url('joaopedro1.png');"></div>
+            <div class="match-circle" style="background-image: url('isabela.png');"></div>
+        </div>
+        <h1 class="match-title">It's a Match!</h1>
+        <p style="color: white; font-weight: bold;">Vocês se curtiram!</p>
+        <br>
+        <button class="btn-main pulse" onclick="goToVideo()">Olhar Surpresa</button>
+    </section>
+
+    <section id="page3" class="page">
+        <h2 style="color: white;">Recado importante... 🎥</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/9VhS4OU-5oI?rel=0" allowfullscreen></iframe>
+        </div>
+        <button id="btnConvite" class="btn-main pulse" style="display: none; margin-top: 25px;" onclick="goToEncontro()">Vamos sair este fim de semana?</button>
+    </section>
+
+    <section id="page4" class="page">
+        <div class="final-card glass">
+            <h1 style="color: var(--tinder-pink);">É oficial! 🥂</h1>
+            <p><strong>📍 Local:</strong> JP SteakHouse Salvador</p>
+            <p><strong>📅 Data:</strong> Dia do seu Niver</p>
+            <p><strong>⏰ Horário:</strong> 18:00h</p>
+            <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 20px 0;">
+            <p style="font-style: italic;">"Trabalhei muito para te proporcionar isso. Você merece o melhor!"</p>
+            <br>
+            <button class="btn-main" style="background: #4285F4;" onclick="window.open('https://www.google.com/maps/search/Restaurante+Amado+Salvador')">📍 Abrir no Maps</button>
+        </div>
+    </section>
+
+    <script>
+        // CONFIGURAÇÕES
+        const dataAniversario = new Date("2026-01-05T00:00:00").getTime(); // AJUSTE A DATA AQUI
+        const fotos = ['foto1.png', 'foto2.png', 'fotoaqui??']; // Suas fotos
+        const tempoVideoSegundos = 5;
+
+        let currentPhoto = 0;
+
+        // LÓGICA DO CONTADOR
+        const intervaloContador = setInterval(function() {
+            const agora = new Date().getTime();
+            const distancia = dataAniversario - agora;
+
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+            document.getElementById("contador-texto").innerHTML = dias + "d " + horas + "h " + minutos + "m " + segundos + "s ";
+
+            if (distancia < 0) {
+                clearInterval(intervaloContador);
+                iniciarSite();
+            }
+        }, 1000);
+
+        function iniciarSite() {
+            showPage('page1');
+            document.getElementById('foto-perfil').style.backgroundImage = `url('${fotos[0]}')`;
+        }
+
+        function fugirOuBloquear() {
+            const btnNope = document.getElementById('btn-nope');
+            const x = Math.random() * 200 - 100;
+            const y = Math.random() * 200 - 100;
+            btnNope.style.transform = `translate(${x}px, ${y}px)`;
+            alert("Aff, nao podi naum 🙄🙄🙄");
+        }
+
+        function nextPhoto() {
+            currentPhoto++;
+            if (currentPhoto < fotos.length) {
+                document.getElementById('foto-perfil').style.backgroundImage = `url('${fotos[currentPhoto]}')`;
+                document.getElementById('btn-nope').style.transform = `translate(0,0)`;
+            } else {
+                showPage('page2');
+            }
+        }
+
+        function goToVideo() {
+            showPage('page3');
+            setTimeout(() => {
+                document.getElementById('btnConvite').style.display = 'block';
+            }, tempoVideoSegundos * 1000);
+        }
+
+        function goToEncontro() {
+            showPage('page4');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#fe3c72', '#ffffff', '#1be4a1'] });
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Caso já tenha passado da data, inicia direto
+        if (new Date().getTime() > dataAniversario) {
+            clearInterval(intervaloContador);
+            iniciarSite();
+        }
+    </script>
+</body>
+</html>
